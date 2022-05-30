@@ -32,6 +32,15 @@ const cookieSessionMiddleware = cookieSession({
 
 app.use(cookieSessionMiddleware);
 
+if (process.env.NODE_ENV == 'production') {
+    app.use((req, res, next) => {
+        if (req.headers['x-forwarded-proto'].startsWith('https')) {
+            return next();
+        }
+        res.redirect(`https://${req.hostname}${req.url}`);
+    });
+}
+
 app.use(logger);
 
 app.use(require("./routes/api/user.js"));

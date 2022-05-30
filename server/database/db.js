@@ -1,6 +1,13 @@
 /* eslint-disable indent */
 const spicedPg = require("spiced-pg");
-const { dbuser, dbpwd } = require('../../secrets.json');
+let dbuser;
+let dbpwd;
+if (process.env.NODE_ENV == 'production') {
+    console.log("running in prod");
+} else {
+    dbuser = require('../../secrets.json').dbuser;
+    dbpwd = require('../../secrets.json').dbpwd;
+}
 
 const db = spicedPg(
     process.env.DATABASE_URL ||
