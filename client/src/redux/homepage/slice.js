@@ -8,7 +8,7 @@ function homepageReducer(state = {}, action) {
         case "homepage/slideritems":
             {
                 const { slideritems } = action.payload;
-                console.log("in slideritems action..", slideritems);
+
                 return {
                     ...state,
                     slideritems: slideritems,
@@ -17,7 +17,7 @@ function homepageReducer(state = {}, action) {
         case "homepage/maincategories":
             {
                 const { maincategories } = action.payload;
-                console.log("in maincategories action..", maincategories);
+
                 return {
                     ...state,
                     maincategories: maincategories,
@@ -26,7 +26,7 @@ function homepageReducer(state = {}, action) {
         case "homepage/popularProducts":
             {
                 const { popularProducts } = action.payload;
-                console.log("in popularProducts action..", popularProducts);
+
                 return {
                     ...state,
                     popularProducts: popularProducts,
@@ -42,12 +42,12 @@ function homepageReducer(state = {}, action) {
 //ACTIONS
 
 function getSliderItems() {
-    console.log("in getSliderItems");
+
     return async function getSliderItemsThunk(dispatch) {
         const { sliderItems } = await fetch("/api/products/slideritems").then((response) =>
             response.json()
         );
-        console.log("data from slideritems :: ", sliderItems);
+
         dispatch({
             type: "homepage/slideritems",
             payload: {
@@ -59,12 +59,12 @@ function getSliderItems() {
 
 //get main categories
 function getMainCategories() {
-    console.log("in getMainCategories");
+
     return async function getMainCategoriesThunk(dispatch) {
         const { mainCategories } = await fetch("/api/products/maincategories").then((response) =>
             response.json()
         );
-        console.log("data from maincategories :: ", mainCategories);
+
         dispatch({
             type: "homepage/maincategories",
             payload: {
@@ -76,12 +76,12 @@ function getMainCategories() {
 
 //get most popular products
 function getPopularProducts() {
-    console.log("in getPopularProducts");
+
     return async function getPopularProductsThunk(dispatch) {
         const { popularProducts } = await fetch("/api/products/popularProducts").then((response) =>
             response.json()
         );
-        console.log("data from popularProducts :: ", popularProducts);
+
         dispatch({
             type: "homepage/popularProducts",
             payload: {

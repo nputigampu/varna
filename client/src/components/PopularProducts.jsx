@@ -18,7 +18,6 @@ const PopularProducts = () => {
     );
 
     useEffect(() => {
-        console.log("in use effect popular products");
         dispatch(getPopularProducts());
     }, []);
 

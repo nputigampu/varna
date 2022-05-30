@@ -8,7 +8,7 @@ function userReducer(state = {}, action) {
         case "user/login":
             {
                 const { user } = action.payload;
-                console.log("in user action..", user);
+
                 return {
                     ...state,
                     user: user,
@@ -17,7 +17,7 @@ function userReducer(state = {}, action) {
         case "user/logout":
             {
 
-                console.log("in user logout action..");
+
                 return {
                     ...state,
                 };
@@ -49,7 +49,7 @@ function userLogout() {
                 Accept: "application/json",
             },
         }).then((response) => response.json());
-        console.log("user logout: ", data);
+
         dispatch({
             type: "user/logout",
             payload: {},

@@ -102,7 +102,6 @@ const Slider = () => {
     const sliderItems = useSelector((state) => state.homepage.slideritems);
 
     useEffect(() => {
-        console.log("in use effect");
         dispatch(getSliderItems());
     }, []);
 

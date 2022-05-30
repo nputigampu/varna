@@ -4,14 +4,12 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import { Icon } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserWishList } from "../redux/wishlist/slice.js";
 import { loadCart } from "../redux/cart/slice.js";
 import { userLogin, userLogout, reset } from "../redux/user/slice.js";
 import { addSearchFilter } from "../redux/filter/slice.js";
-import { getProductByFilter } from "../redux/product/slice.js";
-// import { getProductBySearchParam } from "../redux/product/slice.js";
 
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
@@ -19,7 +17,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
-import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import Logout from "@mui/icons-material/Logout";
 
 const Container = styled.div`
@@ -113,13 +112,16 @@ const NavIconImg = styled.img`
 `;
 
 const Navbar = () => {
+    const shop = useLocation().pathname.split("/").pop();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [searchParam, setSearchParam] = useState("");
     const user = useSelector((state) => state.user.user);
     const cartItems = useSelector((state) => state.cart.cart);
     const wishList = useSelector((state) => state.wishlist.wishlist);
-    const filter_params = useSelector((state) => state.filter.current_filter);
+    const filter_params = useSelector(
+        (state) => state.filter.current_filter.searchParams
+    );
 
     var noOfItemsInWishList = wishList ? wishList.length : 0;
     var noOfItemsInCart = cartItems ? cartItems.length : 0;
@@ -134,20 +136,7 @@ const Navbar = () => {
         setAnchorEl(null);
     };
     useEffect(() => {
-        console.log("in use effect navbar initial");
-        // dispatch(addSearchFilter(""));
-        var initialValue =
-            filter_params && filter_params.searchParam
-                ? filter_params.searchParam
-                : "";
-        setSearchParam(initialValue);
-        dispatch(addSearchFilter(initialValue));
-        // var { searchParam } = filter_params;
-        // if (typeof filter_params.searchParam === "undefined") {
-        //     console.log("search param exists in current filter: ", searchParam);
-        // } else {
-        //     dispatch(addSearchFilter(""));
-        // }
+        setSearchParam(filter_params);
         if (user) {
             dispatch(getUserWishList());
             dispatch(loadCart());
@@ -160,23 +149,19 @@ const Navbar = () => {
             })
                 .then((res) => res.json())
                 .then((result) => {
-                    console.log("result is: ", result);
                     if (result.user) {
                         dispatch(userLogin(result.user));
                         dispatch(getUserWishList());
                         dispatch(loadCart());
                     } else {
-                        console.log("error while logging in user: ");
                     }
                 })
                 .catch((err) => {
                     // if something goes wrong => render an error
-                    console.log("error while logging in user: ", err);
                 });
         }
     }, []);
     useEffect(() => {
-        console.log("in use effect navbar user");
         dispatch(getUserWishList());
         dispatch(loadCart());
         noOfItemsInWishList = wishList ? wishList.length : 0;
@@ -184,28 +169,28 @@ const Navbar = () => {
     }, [user]);
 
     useEffect(() => {
-        console.log("in use effect navbar cart");
         noOfItemsInCart = cartItems ? cartItems.length : 0;
     }, [cartItems]);
 
     useEffect(() => {
-        console.log("in use effect navbar wishlist, ");
         noOfItemsInWishList = wishList ? wishList.length : 0;
     }, [wishList]);
 
     const handleKeyUp = (event) => {
         if (event.key === "Enter") {
-            console.log("Enter key pressed");
             if (event.target.value == "") {
-                console.log("Search text is deleted");
                 dispatch(addSearchFilter(""));
-                dispatch(getProductByFilter());
-                // window.location.reload(true);
             } else {
-                console.log("enteted search text: ", event.target.value);
                 dispatch(addSearchFilter(event.target.value.toLowerCase()));
-                dispatch(getProductByFilter());
-                navigate("/shop");
+                if (
+                    !(
+                        shop === "men" ||
+                        shop === "women" ||
+                        shop === "accessories"
+                    )
+                ) {
+                    navigate("/shop");
+                }
             }
         }
     };
@@ -238,7 +223,6 @@ const Navbar = () => {
                 <Right>
                     <ImageContainer>
                         <NavIconImg
-                            // onClick={() => navigate("/login")}
                             onClick={handleClick}
                             src={"../../icons/user.svg"}
                         ></NavIconImg>
@@ -284,20 +268,42 @@ const Navbar = () => {
                                 vertical: "bottom",
                             }}
                         >
-                            <MenuItem onClick={() => navigate("/profile")}>
-                                <Avatar sx={{ mr: 2 }} /> Profile
-                            </MenuItem>
-                            <MenuItem>
-                                <ShoppingBasketOutlinedIcon sx={{ mr: 1.5 }} />{" "}
-                                My orders
-                            </MenuItem>
-                            <Divider />
-                            <MenuItem onClick={handleLogout}>
-                                <ListItemIcon>
-                                    <Logout fontSize="small" sx={{ mr: 1.5 }} />
-                                </ListItemIcon>
-                                Logout
-                            </MenuItem>
+                            {!user && (
+                                <React.Fragment>
+                                    <MenuItem
+                                        onClick={() => navigate("/login")}
+                                    >
+                                        <LoginOutlinedIcon sx={{ mr: 2 }} />{" "}
+                                        Login
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={() => navigate("/register")}
+                                    >
+                                        <PersonOutlinedIcon sx={{ mr: 1.5 }} />{" "}
+                                        Register
+                                    </MenuItem>
+                                </React.Fragment>
+                            )}
+                            {user && (
+                                <React.Fragment>
+                                    <MenuItem
+                                        onClick={() => navigate("/profile")}
+                                    >
+                                        <PersonOutlinedIcon sx={{ mr: 2 }} />{" "}
+                                        Profile
+                                    </MenuItem>
+                                    <Divider />
+                                    <MenuItem onClick={handleLogout}>
+                                        <ListItemIcon>
+                                            <Logout
+                                                fontSize="small"
+                                                sx={{ mr: 1.5 }}
+                                            />
+                                        </ListItemIcon>
+                                        Logout
+                                    </MenuItem>
+                                </React.Fragment>
+                            )}
                         </Menu>
                     </ImageContainer>
                     <ImageContainer onClick={() => navigate("/wishlist")}>

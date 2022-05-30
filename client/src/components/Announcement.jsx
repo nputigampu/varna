@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import Typography from "@mui/material/Typography";
 
 const Container = styled.div`
     height: 30px;
-    background-color: #007c85;
+    background-color: #56c29c;
     color: white;
     display: flex;
     align-items: center;
@@ -14,8 +15,10 @@ const Container = styled.div`
 const Announcement = () => {
     return (
         <Container>
-            Summer Offer! Free shipping on all orders. Hurry offer ends on 6th
-            June.
+            <Typography variant="h6">
+                Summer Offer! Free shipping on all orders. Hurry offer ends on
+                5th June.
+            </Typography>
         </Container>
     );
 };

@@ -21,7 +21,6 @@ module.exports.login = (req, res, next) => {
     const { email, password } = req.body;
     getUser(email)
         .then(result => {
-            console.log("result:", result);
             if (result.rowCount == 0) {
                 res.json({
                     error: "Email does not exist. Try again !"
@@ -30,7 +29,6 @@ module.exports.login = (req, res, next) => {
                 bcrypt.compare(password, result.user.passwordhash)
                     .then(cmpresult => {
                         if (cmpresult) {
-                            console.log("login is successful");
                             req.session.userId = result.user.id;
                             next();
                             return;
@@ -65,7 +63,7 @@ module.exports.logger = (request, response, next) => {
 };
 
 module.exports.sendEmailWithCode = ({ email, code }) => {
-    console.log("[social:email] sending email with code", email, code);
+
     ses.sendEmail({
         Source: 'nagalakshmi.putigampu@gmail.com',
         Destination: {
@@ -78,7 +76,7 @@ module.exports.sendEmailWithCode = ({ email, code }) => {
                 }
             },
             Subject: {
-                Data: "Password Reset for your Yoga Network login!"
+                Data: "Password Reset for your VARNA account!"
             }
         }
     }).promise().then(

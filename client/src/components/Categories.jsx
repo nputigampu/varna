@@ -8,6 +8,7 @@ import { getMainCategories } from "../redux/homepage/slice.js";
 const Container = styled.div`
     display: flex;
     padding: 20px;
+    align-items: center;
     justify-content: space-between;
     ${mobile({ padding: "0px", flexDirection: "column" })}
 `;
@@ -16,7 +17,6 @@ const Categories = () => {
     const dispatch = useDispatch();
     const categories = useSelector((state) => state.homepage.maincategories);
     useEffect(() => {
-        console.log("in use effect categories");
         dispatch(getMainCategories());
     }, []);
     if (!categories) {

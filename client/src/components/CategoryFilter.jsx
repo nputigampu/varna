@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import * as React from "react";
 import TreeView from "@mui/lab/TreeView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -6,6 +7,7 @@ import TreeItem from "@mui/lab/TreeItem";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { getProductFilters, addCategoryFilter } from "../redux/filter/slice.js";
 import { getProductByFilter } from "../redux/product/slice.js";
 
@@ -67,7 +69,13 @@ const useItemStyles = makeStyles(() => ({
     },
 }));
 
-export default function CategoryFilter({ category }) {
+export default function CategoryFilter() {
+    const location = useLocation();
+    const [prodCat, setProdCat] = React.useState("");
+    const [category, setCategory] = React.useState("");
+    const initCategory = useSelector(
+        (state) => state.filter.current_filter.category
+    );
     const classesView = useViewStyles();
     const classesItem = useItemStyles();
     const dispatch = useDispatch();
@@ -88,39 +96,42 @@ export default function CategoryFilter({ category }) {
     const productFilters = useSelector((state) => state.filter.productFilters);
 
     React.useEffect(() => {
-        console.log("in use effect category initial; ", category);
+        let shop = location.pathname.split("/").pop();
+        let category = shop === "shop" ? "all" : shop;
+        setCategory(category);
+        let prodCat = "0";
+        switch (category) {
+            case "men":
+                prodCat = "1";
+                break;
+            case "women":
+                prodCat = "2";
+                break;
+            case "accessories":
+                prodCat = "3";
+                break;
+        }
+        setProdCat(prodCat);
         dispatch(getProductFilters(category));
+        dispatch(addCategoryFilter(prodCat));
+        setSelected([prodCat]);
     }, []);
 
-    React.useEffect(() => {
-        console.log("in use effect category expanded; ", expanded);
-    }, [expanded]);
+    React.useEffect(() => {}, [initCategory]);
+
+    React.useEffect(() => {}, [expanded]);
 
     React.useEffect(() => {
-        console.log("in use effect category selected; ", selected);
         dispatch(addCategoryFilter(selected[0]));
         dispatch(getProductByFilter());
     }, [selected]);
 
     const handleToggle = (event, nodeIds) => {
-        // if (event.target.nodeName !== "svg") {
-        //     return;
-        // }
         setExpanded(nodeIds);
     };
 
     const handleSelect = (event, nodeIds) => {
-        console.log("selected node id is: ", nodeIds);
         setSelected([nodeIds]);
-        // if (event.target.nodeName === "svg") {
-        //     return;
-        // }
-        // const first = nodeIds[0];
-        // if (selected.includes(first)) {
-        //     setSelected(selected.filter((id) => id !== first));
-        // } else {
-        //     setSelected([first, ...selected]);
-        // }
     };
     if (!productFilters) {
         return null;
@@ -141,7 +152,7 @@ export default function CategoryFilter({ category }) {
                 defaultCollapseIcon={<ExpandMoreIcon />}
                 defaultExpandIcon={<ChevronRightIcon />}
                 expanded={expanded}
-                // selected={selected}
+                selected={selected}
                 onNodeToggle={handleToggle}
                 onNodeSelect={handleSelect}
             >

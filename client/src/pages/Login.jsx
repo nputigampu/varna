@@ -74,10 +74,10 @@ const Login = () => {
 
     const loginUser = (event) => {
         event.preventDefault();
-        console.log("login user", event);
+
         if (validator.allValid()) {
             // alert("All fields are valid");
-            console.log("All fields are valid");
+
             fetch("/api/user/login", {
                 method: "POST",
                 headers: {
@@ -90,22 +90,18 @@ const Login = () => {
             })
                 .then((res) => res.json())
                 .then((result) => {
-                    console.log("result is: ", result);
                     if (result.user) {
                         dispatch(userLogin(result.user));
                         dispatch(getUserWishList());
                         dispatch(loadCart());
                         navigate("/");
                     } else {
-                        console.log("error while logging in user: ");
                     }
                 })
                 .catch((err) => {
                     // if something goes wrong => render an error
-                    console.log("error while logging in user: ", err);
                 });
         } else {
-            console.log("All fields are not valid");
         }
     };
 

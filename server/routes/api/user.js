@@ -6,13 +6,13 @@ const router = Router();
 
 //get user details
 router.get("/api/user", isLoggedIn, async(req, res) => {
-    const user = await getUserById(req.session.userId);
+    const { user } = await getUserById(req.session.userId);
     res.json({ user });
 });
 
 //add new user 
 router.post('/api/user', async(req, res) => {
-    console.log("add user");
+
     const { firstname, lastname, email, username, password } = req.body;
     const pwdHash = await hashPassword(password);
     const newUser = await addUser(firstname, lastname, email, username, pwdHash);
@@ -22,7 +22,7 @@ router.post('/api/user', async(req, res) => {
 
 // Login new user
 router.post('/api/user/login', login, async(req, res) => {
-    console.log('user logged in');
+
     const { user } = await getUserById(req.session.userId);
     res.json({ user });
 });
@@ -32,7 +32,6 @@ router.post('/api/user/password', function(req, res) {
     const { email } = req.body;
     getUser(email)
         .then(result => {
-            console.log("result:", result);
             if (result.rowCount == 0) {
                 res.json({ success: false, error: "Email does not exist. Try again !" });
             } else {
@@ -45,7 +44,6 @@ router.post('/api/user/password', function(req, res) {
             }
         })
         .catch(error => {
-            console.log('error: ', error);
             res.json({ success: false, error: 'Something went wrong. Please try again !' });
         });
 });
@@ -55,7 +53,7 @@ router.put('/api/user/password', function(req, res) {
     const { email, code, password } = req.body;
     getPasswordResetCode(email)
         .then(result => {
-            console.log("result:", result);
+
             if (result.rowCount == 0) {
                 res.json({ success: false, error: "Code expired. Request new code !" });
             } else {
@@ -63,14 +61,11 @@ router.put('/api/user/password', function(req, res) {
                     hashPassword(password).then((hasedPwd) => {
                         updatePwd(email, hasedPwd)
                             .then(result => {
-                                console.log("password updated successfully: ", result);
                                 res.json({ success: true });
                             }).catch(error => {
-                                console.log("error while updating password: ", error);
                                 res.json({ success: false, error: "Something went wrong while updating the password. Please try again" });
                             });
                     }).catch(error => {
-                        console.log("error while hashing password: ", error);
                         res.json({ success: false, error: "Something went wrong while updating the password. Please try again" });
                     });
                 } else {
@@ -79,14 +74,13 @@ router.put('/api/user/password', function(req, res) {
             }
         })
         .catch(error => {
-            console.log('error: ', error);
             res.json({ success: false, error: 'Something went wrong. Please try again !' });
         });
 });
 
 // Logout
 router.post("/api/user/logout", isLoggedIn, function(req, res) {
-    console.log("in /api/user/logout: ", req.session.userId);
+
     if (req.session.userId) {
         req.session = null;
     }

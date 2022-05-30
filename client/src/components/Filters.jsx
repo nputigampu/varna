@@ -1,12 +1,20 @@
 /* eslint-disable indent */
 import styled from "styled-components";
-import { mobile } from "../responsive";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { getProductFilters } from "../redux/filter/slice.js";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import PriceFilter from "./PriceFilter";
 import ProductRatingFilter from "./ProductRatingFilter";
 import CategoryFilter from "./CategoryFilter";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import {
+    getProductFilters,
+    addCategoryFilter,
+    addRatingFilter,
+    addPricingFilter,
+} from "../redux/filter/slice.js";
+import { getProductByFilter } from "../redux/product/slice.js";
 
 const FilterContainer = styled.div`
     display: flex;
@@ -14,27 +22,59 @@ const FilterContainer = styled.div`
     gap: 10px;
     margin-left: 20px;
     margin-right: 20px;
-    // justify-content: space-between;
 `;
 
-const FilterText = styled.span`
-    font-size: 18px;
-    font-weight: 600;
-    margin-right: 20px;
-    ${mobile({ marginRight: "0px" })}
-`;
-
-const Filters = ({ category }) => {
+const Filters = () => {
+    const location = useLocation();
     const dispatch = useDispatch();
-    useEffect(() => {
-        console.log("in use effect filters : ", category);
-        dispatch(getProductFilters(category));
-    }, []);
+    const filter_params = useSelector((state) => state.filter.current_filter);
+    const [prodCat, setProdCat] = useState("");
+    const [category, setCategory] = useState("");
 
+    useEffect(() => {
+        let shop = location.pathname.split("/").pop();
+        let category = shop === "shop" ? "all" : shop;
+        setCategory(category);
+        let prodCat = "0";
+        switch (category) {
+            case "men":
+                prodCat = "1";
+                break;
+            case "women":
+                prodCat = "2";
+                break;
+            case "accessories":
+                prodCat = "3";
+                break;
+        }
+        setProdCat(prodCat);
+        dispatch(getProductByFilter());
+    }, []);
+    useEffect(() => {
+        dispatch(getProductByFilter());
+    }, [filter_params]);
+
+    const resetFilters = () => {
+        dispatch(getProductFilters(category));
+        dispatch(addCategoryFilter(prodCat));
+        dispatch(addPricingFilter([0, 200]));
+        dispatch(addRatingFilter(0));
+        dispatch(getProductByFilter());
+    };
     return (
         <FilterContainer>
-            <FilterText>Select Products</FilterText>
-            <CategoryFilter category={category}></CategoryFilter>
+            <Stack spacing={3} direction="row">
+                <Button
+                    variant="outlined"
+                    sx={{
+                        mb: 1.5,
+                    }}
+                    onClick={resetFilters}
+                >
+                    Clear
+                </Button>
+            </Stack>
+            <CategoryFilter></CategoryFilter>
             <PriceFilter />
             <ProductRatingFilter></ProductRatingFilter>
         </FilterContainer>

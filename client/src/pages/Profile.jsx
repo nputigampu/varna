@@ -7,21 +7,15 @@ import Footer from "../components/Footer";
 import { mobile } from "../responsive";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
+import LoginMessage from "../components/LoginMessage";
 
 const Container = styled.div``;
 
-const LoginWrapper = styled.div`
-    align-items: center;
+const LoginMessageWrapper = styled.div`
     margin-top: 50px;
+    align-items: center;
     ${mobile({ marginRight: "0px" })}
-`;
-
-const Title = styled.h2`
-    font-weight: 50;
-    text-align: center;
-    margin-bottom: 30px;
 `;
 
 const MainWrapper = styled.div`
@@ -32,35 +26,17 @@ const MainWrapper = styled.div`
 
 const Wrapper = styled.div`
     margin-top: 50px;
+    margin-bottom: 20px;
     align-items: center;
-    ${mobile({ marginRight: "0px" })}
-`;
-
-const Top = styled.div`
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-`;
-
-const MiddleButton = styled.button`
-    padding: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    margin: auto;
-    border: ${(props) => props.type === "filled" && "none"};
-    background-color: ${(props) =>
-        props.type === "filled" ? "black" : "transparent"};
-    color: ${(props) => props.type === "filled" && "white"};
+    justify-content: center;
+    ${mobile({ marginRight: "0px" })}
 `;
 
 const Profile = () => {
     const user = useSelector((state) => state.user.user);
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log("in use effect wishlist first time ");
-    }, [user]);
+    useEffect(() => {}, [user]);
 
     return (
         <Container>
@@ -69,24 +45,14 @@ const Profile = () => {
             <MainWrapper>
                 {user && (
                     <Wrapper>
-                        <Typography variant="h3" component="h2">
+                        <Typography variant="h4" component="h3">
                             Welcome {user.firstname} {user.lastname}
                         </Typography>
                     </Wrapper>
                 )}
-                {!user && (
-                    <LoginWrapper>
-                        <Title>
-                            You are not logged in. Please login to see your
-                            wishlist and cart{" "}
-                        </Title>
-                        <Top>
-                            <MiddleButton onClick={() => navigate("/login")}>
-                                LOGIN
-                            </MiddleButton>
-                        </Top>
-                    </LoginWrapper>
-                )}
+                <LoginMessageWrapper>
+                    {!user && <LoginMessage></LoginMessage>}
+                </LoginMessageWrapper>
             </MainWrapper>
             <Newsletter />
             <Footer />

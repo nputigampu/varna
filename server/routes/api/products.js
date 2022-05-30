@@ -1,29 +1,21 @@
 /* eslint-disable indent */
-const { getProductsBySearchParams, getProductsBySelection, getPopularProducts } = require("../../database/db");
+const {
+    getProductsBySearchParams,
+    getProductsBySelectionSortByLatest,
+    getProductsBySelectionSortByPriceLow,
+    getProductsBySelectionSortByPriceHigh,
+    getProductsBySelectionSortByRating,
+    getProductsBySelectionSortByPopularity,
+    getPopularProducts
+} = require("../../database/db");
 const { Router } = require("express");
 const { sliderItems, mainCategories } = require("../../config/data");
 const { men, women, accessories, childNodes, all } = require("../../config/categories");
 const router = Router();
 
-function resolveSortBy(sortby) {
-    switch (sortby) {
-        case 'newest':
-            return { column: 'createdat', sorted: 'DESC' };
-        case 'price_lowest':
-            return { column: 'price_value', sorted: 'ASC' };
-        case 'price_higjest':
-            return { column: 'price_value', sorted: 'DESC' };
-        case 'rating':
-            return { column: 'rating', sorted: 'DESC' };
-        case 'popularity':
-            return { column: 'ratings_total', sorted: 'DESC' };
-        default:
-            return { column: 'createdat', sorted: 'DESC' };
-    }
-}
 //Return categories for each section
 router.get("/api/products/prodcat/:id", async(req, res) => {
-    console.log("In /api/products/prodcat ", req.params.id);
+
 
     switch (req.params.id) {
         case 'men':
@@ -44,10 +36,10 @@ router.get("/api/products/prodcat/:id", async(req, res) => {
 //Search for products
 router.get("/api/products/search/", async(req, res) => {
     const { searchParams } = req.query;
-    console.log("In /api/prodcts/search/ ", searchParams);
+
     getProductsBySearchParams(searchParams)
         .then(result => {
-            // console.log("products: ", result);
+            // 
             if (result.rowCount > 0) {
                 result.success = true;
                 res.json(result);
@@ -63,25 +55,25 @@ router.get("/api/products/search/", async(req, res) => {
                 success: false,
                 error: 'error while retrieveing products'
             });
-            console.log("error while retrieveing products: ", error);
+
         });
 });
 
 //Search for slider products
 router.get("/api/products/slideritems", async(req, res) => {
-    console.log("In /api/products/slideritems ");
+
     res.json({ sliderItems });
 });
 
 //Search for maincategories
 router.get("/api/products/maincategories", async(req, res) => {
-    console.log("In /api/products/maincategories ");
+
     res.json({ mainCategories });
 });
 
 //Search for most popular products
 router.get("/api/products/popularProducts", async(req, res) => {
-    console.log("In /api/products/popularProducts ");
+
     const { products } = await getPopularProducts();
     res.json({
         popularProducts: products
@@ -89,9 +81,9 @@ router.get("/api/products/popularProducts", async(req, res) => {
 });
 
 //Search for products by Category
-router.get("/api/products/", function(req, res) {
-    console.log("In /api/products/ ", req.query);
-    const { category, rating, pricefrom, priceto, searchParams } = req.query;
+router.get("/api/products/", async(req, res) => {
+
+    const { category, rating, pricefrom, priceto, searchParams, sort } = req.query;
     let categories = [];
     //ugly hack to get child categories. Need to fix it later.
     if (parseInt(category) < 100) {
@@ -100,22 +92,37 @@ router.get("/api/products/", function(req, res) {
     } else {
         categories[0] = category;
     }
-    const { orderby, sorted } = resolveSortBy('');
 
     if (req.query) {
-        getProductsBySelection(categories, rating, pricefrom, priceto, searchParams)
-            .then(result => {
-                console.log("products found matching search params: ", result.rowCount);
-                result.success = true;
+        var result;
+        switch (sort) {
+            case 'NEWEST':
+                result = await getProductsBySelectionSortByLatest(categories, rating, pricefrom, priceto, searchParams);
+
                 res.json(result);
-            })
-            .catch(error => {
-                res.json({
-                    success: false,
-                    error: 'error while searching for products'
-                });
-                console.log("error while searching for products: ", error);
-            });
+                break;
+            case 'PRICE_LOW':
+                result = await getProductsBySelectionSortByPriceLow(categories, rating, pricefrom, priceto, searchParams);
+
+                res.json(result);
+                break;
+            case 'PRICE_HIGH':
+                result = await getProductsBySelectionSortByPriceHigh(categories, rating, pricefrom, priceto, searchParams);
+
+                res.json(result);
+                break;
+            case 'RATING':
+                result = await getProductsBySelectionSortByRating(categories, rating, pricefrom, priceto, searchParams);
+
+                res.json(result);
+                break;
+            case 'POPULARITY':
+                result = await getProductsBySelectionSortByPopularity(categories, rating, pricefrom, priceto, searchParams);
+
+                res.json(result);
+                break;
+        }
+
     }
 });
 

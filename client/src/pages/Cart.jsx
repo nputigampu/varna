@@ -5,6 +5,7 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
+import LoginMessage from "../components/LoginMessage";
 import { mobile } from "../responsive";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,13 +26,19 @@ const Wrapper = styled.div`
     ${mobile({ padding: "10px" })}
 `;
 
+const LoginMessageWrapper = styled.div`
+    margin-top: 50px;
+    align-items: center;
+    ${mobile({ marginRight: "0px" })}
+`;
+
 const Title = styled.h2`
     font-weight: 50;
     text-align: center;
 `;
 
 const CheckoutMessage = styled.h1`
-    margin-top: 200px;
+    margin-top: 100px;
     margin-bottom: 20px;
     font-weight: 200;
     text-align: center;
@@ -65,15 +72,6 @@ const MiddleButton = styled.button`
     color: ${(props) => props.type === "filled" && "white"};
 `;
 
-// const TopTexts = styled.div`
-//     ${mobile({ display: "none" })}
-// `;
-// const TopText = styled.span`
-//     text-decoration: underline;
-//     cursor: pointer;
-//     margin: 0px 10px;
-// `;
-
 const Bottom = styled.div`
     // display: flex;
     // justify-content: space-between;
@@ -100,8 +98,8 @@ const ProductDetail = styled.div`
 `;
 
 const Image = styled.img`
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 260px;
 `;
 
 const Details = styled.div`
@@ -114,15 +112,6 @@ const Details = styled.div`
 const ProductName = styled.span``;
 
 const ProductId = styled.span``;
-
-const ProductColor = styled.div`
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: ${(props) => props.color};
-`;
-
-const ProductSize = styled.span``;
 
 const PriceDetail = styled.div`
     flex: 1;
@@ -145,8 +134,8 @@ const ProductAmount = styled.div`
 `;
 
 const ProductPrice = styled.div`
-    font-size: 30px;
-    font-weight: 200;
+    font-size: 20px;
+    font-weight: 100;
     ${mobile({ marginBottom: "20px" })}
 `;
 
@@ -169,8 +158,8 @@ const SummaryTitle = styled.h1`
 `;
 
 const ImageContainer = styled.div`
-    height: 150px;
-    width: 150px;
+    height: 180px;
+    width: 160px;
     margin: 30px auto 0 auto;
 `;
 
@@ -207,25 +196,19 @@ const CartItemContainer = styled.div`
 `;
 
 const Cart = () => {
-    const getRandomInt = (max) => {
-        return Math.floor(Math.random() * max);
-    };
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [total, setTotal] = useState(0);
     const [checkOut, setCheckOut] = useState(false);
-    // const wishlist = useSelector((state) => state.wishlist.wishlist);
     const cart = useSelector((state) => state.cart.cart);
     const user = useSelector((state) => state.user.user);
 
     useEffect(() => {
-        console.log("in use effect cart page");
         dispatch(getUserWishList());
         dispatch(loadCart());
     }, []);
 
     useEffect(() => {
-        console.log("in use effect cart page");
         let sum = 0;
         if (cart) {
             cart.forEach((item) => {
@@ -235,9 +218,7 @@ const Cart = () => {
         setTotal(sum);
     }, [cart]);
 
-    useEffect(() => {
-        console.log("in use effect cart page");
-    }, [user]);
+    useEffect(() => {}, [user]);
 
     const onCheckOut = () => {
         dispatch(emptyCart());
@@ -253,27 +234,7 @@ const Cart = () => {
             dispatch(updateCartItem(item.productid, increment));
         }
     };
-    // if (!user) {
-    //     return (
-    //         <Container>
-    //             <Announcement />
-    //             <Navbar />
-    //             <Wrapper>
-    //                 <Title>Please Login First</Title>
-    //                 <ImageContainer>
-    //                     <EmptyBag src={"../../icons/empty-bag.svg"}></EmptyBag>
-    //                 </ImageContainer>
-    //                 <Top>
-    //                     <MiddleButton onClick={() => navigate("/login")}>
-    //                         LOGIN
-    //                     </MiddleButton>
-    //                 </Top>
-    //             </Wrapper>
-    //             <Newsletter />
-    //             <Footer />
-    //         </Container>
-    //     );
-    // }
+
     return (
         <Container>
             <Announcement />
@@ -285,14 +246,6 @@ const Cart = () => {
                         <TopButton onClick={() => navigate("/")}>
                             CONTINUE SHOPPING
                         </TopButton>
-                        {/* <TopTexts>
-                            <TopText>
-                                Shopping Bag({cart && cart.length})
-                            </TopText>
-                            <TopText>
-                                Your Wishlist ({wishlist && wishlist.length})
-                            </TopText>
-                        </TopTexts> */}
                         <TopButton type="filled" onClick={onCheckOut}>
                             CHECKOUT NOW
                         </TopButton>
@@ -311,28 +264,6 @@ const Cart = () => {
                                                 <ProductId>
                                                     <b>ID:</b> {item.productid}
                                                 </ProductId>
-                                                <ProductColor
-                                                    // color={item.item_color}
-                                                    color={
-                                                        item.color[
-                                                            getRandomInt(
-                                                                item.color
-                                                                    .length
-                                                            )
-                                                        ]
-                                                    }
-                                                />
-                                                <ProductSize>
-                                                    <b>Size:</b>{" "}
-                                                    {
-                                                        item.sizes[
-                                                            getRandomInt(
-                                                                item.sizes
-                                                                    .length
-                                                            )
-                                                        ]
-                                                    }
-                                                </ProductSize>
                                             </Details>
                                         </ProductDetail>
                                         <PriceDetail>
@@ -404,35 +335,25 @@ const Cart = () => {
             )}
             {(!cart || cart.length == 0) && user && !checkOut && (
                 <Wrapper>
-                    <Title>Your bag is Empty</Title>
+                    <Title>You do not have any items in your cart yet. </Title>
                     <ImageContainer>
                         <EmptyBag src={"../../icons/empty-bag.svg"}></EmptyBag>
                     </ImageContainer>
                     <Top>
-                        <MiddleButton onClick={() => navigate("/products")}>
+                        <MiddleButton onClick={() => navigate("/")}>
                             SHOP NOW
                         </MiddleButton>
                     </Top>
                 </Wrapper>
             )}
-            {!user && !checkOut && (
-                <Wrapper>
-                    <Title>Please Login </Title>
-                    <ImageContainer>
-                        <EmptyBag src={"../../icons/empty-bag.svg"}></EmptyBag>
-                    </ImageContainer>
-                    <Top>
-                        <MiddleButton onClick={() => navigate("/login")}>
-                            LOGIN
-                        </MiddleButton>
-                    </Top>
-                </Wrapper>
-            )}
+            <LoginMessageWrapper>
+                {!user && !checkOut && <LoginMessage></LoginMessage>}
+            </LoginMessageWrapper>
             {user && checkOut && (
                 <Wrapper>
                     <CheckoutMessage>
-                        Thank you for choosing Varna. Your order is in process.
-                        Please continue to shop{" "}
+                        Thank you for choosing Varna. Your order will be
+                        processed soon.{" "}
                     </CheckoutMessage>
                     <Top>
                         <MiddleButton

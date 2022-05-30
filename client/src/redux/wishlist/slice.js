@@ -8,7 +8,7 @@ function wishlistReducer(state = {}, action) {
         case "wishlist/initial":
             {
                 const { items } = action.payload;
-                console.log("in wishlist action..", items);
+
                 return {
                     ...state,
                     wishlist: items,
@@ -16,7 +16,7 @@ function wishlistReducer(state = {}, action) {
             }
         case "wishlist/newItem":
             {
-                console.log("in new wish list item action..", action.payload);
+
                 const { item } = action.payload;
                 return {
                     ...state,
@@ -25,7 +25,7 @@ function wishlistReducer(state = {}, action) {
             }
         case "wishlist/removeItem":
             {
-                console.log("in remove wish list item action..", action.payload);
+
                 const { productid } = action.payload;
                 return {
                     ...state,
@@ -45,12 +45,12 @@ function wishlistReducer(state = {}, action) {
 
 //get user wish list
 function getUserWishList() {
-    console.log("in getUserWishList: ");
+
     return async function getUserWishListThunk(dispatch) {
         var wishlist = await fetch("/api/wishlist/").then((response) =>
             response.json()
         );
-        console.log("data from User Wish List :: ", wishlist);
+
         if (wishlist.error) {
             wishlist = [];
         }
@@ -64,7 +64,7 @@ function getUserWishList() {
 }
 
 function newItem(product_id) {
-    console.log("in new item wish list slice: ");
+
     let url = "/api/wishlist/";
     let method = "POST";
     let body = JSON.stringify({
@@ -79,7 +79,7 @@ function newItem(product_id) {
             },
             body: body,
         }).then((response) => response.json());
-        console.log("new item in wish list: ", data);
+
         dispatch({
             type: "wishlist/newItem",
             payload: {
@@ -90,7 +90,7 @@ function newItem(product_id) {
 }
 
 function removeItem(product_id) {
-    console.log("in remove item wish list slice: ");
+
     let url = "/api/wishlist/";
     let method = "DELETE";
     let body = JSON.stringify({
@@ -105,7 +105,7 @@ function removeItem(product_id) {
             },
             body: body,
         }).then((response) => response.json());
-        console.log("remove item in wish list: ", data);
+
         if (data.error) {
             product_id = '';
         }

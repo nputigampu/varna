@@ -80,18 +80,16 @@ const Register = () => {
     let validator = new SimpleReactValidator({ locale: "de" });
     const checkPassword = () => {
         if (password == confirmPassword) {
-            console.log("passwords match. ");
         } else {
-            console.log("passwords does not match. try again");
         }
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("register new user", event);
+
         if (validator.allValid()) {
             // alert("All fields are valid");
-            console.log("All fields are valid");
+
             fetch("/api/user", {
                 method: "POST",
                 headers: {
@@ -107,20 +105,16 @@ const Register = () => {
             })
                 .then((res) => res.json())
                 .then((result) => {
-                    console.log("result is: ", result);
                     if (result.newUser) {
                         dispatch(userLogin(result.newUser));
                         navigate("/");
                     } else {
-                        console.log("error while registering user: ");
                     }
                 })
                 .catch((err) => {
                     // if something goes wrong => render an error
-                    console.log("error while registering user: ", err);
                 });
         } else {
-            console.log("All fields are not valid");
             validator.showMessages();
         }
     };

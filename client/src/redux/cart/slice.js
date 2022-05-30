@@ -8,7 +8,7 @@ function cartReducer(state = {}, action) {
         case "cart/loadCart":
             {
                 const { items } = action.payload;
-                console.log("in cart initial load..", action.payload);
+
                 return {
                     ...state,
                     cart: items,
@@ -16,7 +16,7 @@ function cartReducer(state = {}, action) {
             }
         case "cart/newItem":
             {
-                console.log("in cart new item action..", action.payload.newItem);
+
                 return {
                     ...state,
                     cart: [...state.cart, action.payload.newItem]
@@ -24,7 +24,7 @@ function cartReducer(state = {}, action) {
             }
         case "cart/removeItem":
             {
-                console.log("in cart remove item action..", action.payload.removeItem);
+
                 const { productid } = action.payload;
                 return {
                     ...state,
@@ -35,7 +35,7 @@ function cartReducer(state = {}, action) {
             }
         case "cart/updateItem":
             {
-                console.log("in cart update item action..", action.payload);
+
                 const { productid, no_of_items } = action.payload;
                 return {
                     ...state,
@@ -47,7 +47,7 @@ function cartReducer(state = {}, action) {
             }
         case "cart/emptyCart":
             {
-                console.log("in empty cart action..", action.payload);
+
                 return {
                     ...state,
                     cart: []
@@ -64,12 +64,11 @@ function cartReducer(state = {}, action) {
 
 //get latest messages
 function loadCart() {
-    console.log("in load cart: ");
+
     return async function getLoadCartThunk(dispatch) {
         var cartItems = await fetch("/api/cart").then((response) =>
             response.json()
         );
-        console.log("data from cart List :: ", cartItems);
         if (cartItems.error) {
             cartItems = [];
         }
@@ -83,7 +82,7 @@ function loadCart() {
 }
 
 function newCartItem(product_id) {
-    console.log("in new cart item list slice: ", product_id);
+
     let url = "/api/cart/";
     let method = "POST";
     let body = JSON.stringify({
@@ -98,7 +97,7 @@ function newCartItem(product_id) {
             },
             body: body,
         }).then((response) => response.json());
-        console.log("new item in cart: ", data);
+
         if (data.error) {
             data = '';
         }
@@ -112,7 +111,7 @@ function newCartItem(product_id) {
 }
 
 function removeCartItem(product_id) {
-    console.log("in remove cart item slice: ");
+
     let url = "/api/cart/";
     let method = "DELETE";
     let body = JSON.stringify({
@@ -127,7 +126,7 @@ function removeCartItem(product_id) {
             },
             body: body,
         }).then((response) => response.json());
-        console.log("remove cart item in list: ", data);
+
         if (data.error) {
             product_id = '';
         }
@@ -141,7 +140,7 @@ function removeCartItem(product_id) {
 }
 
 function updateCartItem(product_id, increment) {
-    console.log("in uodate cart item list slice: ", product_id, increment);
+
     let url = "/api/cart/" + product_id;
     let method = "PUT";
     let body = JSON.stringify({
@@ -156,7 +155,7 @@ function updateCartItem(product_id, increment) {
             },
             body: body,
         }).then((response) => response.json());
-        console.log("update item in cart: ", data);
+
         if (data.error) {
             increment = 0;
         }
@@ -171,7 +170,7 @@ function updateCartItem(product_id, increment) {
 }
 
 function emptyCart() {
-    console.log("in empty cart: ");
+
     let url = "/api/cart/empty";
     let method = "POST";
     return async function emptyCartItemThunk(dispatch) {
@@ -182,7 +181,7 @@ function emptyCart() {
                 Accept: "application/json",
             },
         }).then((response) => response.json());
-        console.log("update item in cart: ", data);
+
         if (data.error) {
             data = '';
         }

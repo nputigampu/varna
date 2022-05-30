@@ -6,7 +6,6 @@ import {
 } from "@material-ui/icons";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import styled from "styled-components";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { newCartItem, updateCartItem } from "../redux/cart/slice.js";
@@ -85,13 +84,6 @@ const Container = styled.div`
     }
 `;
 
-// const Circle = styled.div`
-//     width: 200px;
-//     height: 200px;
-//     border-radius: 50%;
-//     background-color: white;
-//     position: absolute;
-// `;
 const ImageContainer = styled.div`
     height: 75%;
     display: flex;
@@ -126,12 +118,8 @@ const Product = ({ item }) => {
     const wishlist = useSelector((state) => state.wishlist.wishlist);
     const cart = useSelector((state) => state.cart.cart);
     const handleClick = (parameter) => (event) => {
-        console.log("console log: ", event);
-        console.log("console log parameter: ", parameter);
-        console.log("item id is : ", user);
         event.stopPropagation();
         if (user) {
-            console.log("adding item to wish list in prod");
             switch (parameter) {
                 case "wishlist":
                     var temp = wishlist.find(
@@ -161,16 +149,11 @@ const Product = ({ item }) => {
             if (parameter == "detail") {
                 navigate("/shop/item/" + item.id + "/detail");
             } else {
-                console.log("cant add to wishlist. login first");
                 // event.stopPropagation();
                 navigate("/login");
             }
         }
     };
-
-    useEffect(() => {
-        console.log("in use effect product first time render");
-    }, []);
 
     return (
         <Container>

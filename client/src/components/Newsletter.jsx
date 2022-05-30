@@ -9,13 +9,13 @@ const Container = styled.div`
     justify-content: center;
     flex-direction: column;
 `;
-const Title = styled.h1`
-    font-size: 2rem;
+const Title = styled.h3`
+    font-size: 1.5rem;
     margin-bottom: 20px;
 `;
 
 const Desc = styled.div`
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 300;
     margin-bottom: 20px;
     ${mobile({ textAlign: "center" })}

@@ -4,9 +4,12 @@ import { mobile } from "../responsive";
 import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
-    flex: 1;
+    // flex: 1;
+    display: flex;
+    justfify-content: center;
     margin: 3px;
-    height: 70vh;
+    height: 60vh;
+    width: 30vw;
     position: relative;
 `;
 

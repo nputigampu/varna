@@ -6,6 +6,13 @@ const path = require("path");
 const { logger } = require("./middlewares/common");
 const cookieSession = require('cookie-session');
 const server = Server(app);
+let sessionSecret;
+
+if (process.env.NODE_ENV == 'production') {
+    sessionSecret = process.env.SESSION_SECRET;
+} else {
+    sessionSecret = require('../secrets.json').SESSION_SECRET;
+}
 
 app.use(compression());
 app.use(express.json());
@@ -17,10 +24,10 @@ app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
 // Cookie session middleware
 const cookieSessionMiddleware = cookieSession({
-    secret: '...',
+    secret: sessionSecret,
     // cookie become invalid after 30 minutes
     maxAge: 1000 * 60 * 60 * 0.5,
-    sameSite: true
+    sameSite: true,
 });
 
 app.use(cookieSessionMiddleware);
@@ -47,5 +54,5 @@ app.get("*", function(req, res) {
 });
 
 server.listen(process.env.PORT || 3001, function() {
-    console.log("I'm listening.");
+    console.log("I'm listening .. ");
 });

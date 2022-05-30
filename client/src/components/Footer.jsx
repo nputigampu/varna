@@ -42,7 +42,7 @@ const Logo = styled.h1`
 
 const Desc = styled.p`
     margin: 20px 0px;
-    font-size: 20px;
+    font-size: 18px;
 `;
 
 const SocialContainer = styled.div`

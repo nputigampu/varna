@@ -4,7 +4,7 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import { addRatingFilter } from "../redux/filter/slice.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getProductByFilter } from "../redux/product/slice.js";
 
 const StyledRating = styled(Rating)({
@@ -18,12 +18,18 @@ const StyledRating = styled(Rating)({
 
 export default function ProductRatingFilter() {
     const [value, setValue] = React.useState(0);
+    const rating = useSelector((state) => state.filter.current_filter.rating);
     const dispatch = useDispatch();
+
     React.useEffect(() => {
-        console.log("new value is:", value);
+        setValue(rating);
+    }, [rating]);
+
+    React.useEffect(() => {
         dispatch(addRatingFilter(value));
         dispatch(getProductByFilter());
     }, [value]);
+
     return (
         <Box
             sx={{

@@ -76,7 +76,8 @@ module.exports.getProductsBySearchParams = (searchParams) => {
             return { rowCount: result.rowCount, products: result.rows };
         });
 };
-module.exports.getProductsBySelection = (categories, rating, pricefrom, priceto, searchParams) => {
+
+module.exports.getProductsBySelectionSortByLatest = (categories, rating, pricefrom, priceto, searchParams) => {
     return db
         .query(`SELECT id, product_id as productid, category_id, title, image, brand, rating, ratings_total, price_value, availability
                 FROM PRODUCTS   
@@ -85,20 +86,111 @@ module.exports.getProductsBySelection = (categories, rating, pricefrom, priceto,
                 AND price_value >= $3
                 AND price_value <= $4
                 AND (LOWER(title) ILIKE $5)
+                ORDER BY createdat DESC
+                LIMIT 50
              `, [categories, rating, pricefrom, priceto, '%' + searchParams + '%'])
         .then((result) => {
             return { rowCount: result.rowCount, products: result.rows };
         })
         .catch(function(err) {
-            console.log("error code is ", err);
+
         });
 };
+
+module.exports.getProductsBySelectionSortByPriceLow = (categories, rating, pricefrom, priceto, searchParams) => {
+    return db
+        .query(`SELECT id, product_id as productid, category_id, title, image, brand, rating, ratings_total, price_value, availability
+                FROM PRODUCTS   
+                WHERE category_id = ANY($1)
+                AND rating >= $2
+                AND price_value >= $3
+                AND price_value <= $4
+                AND (LOWER(title) ILIKE $5)
+                ORDER BY PRICE_VALUE ASC
+                LIMIT 50
+             `, [categories, rating, pricefrom, priceto, '%' + searchParams + '%'])
+        .then((result) => {
+            return { rowCount: result.rowCount, products: result.rows };
+        })
+        .catch(function(err) {
+
+        });
+};
+
+module.exports.getProductsBySelectionSortByPriceHigh = (categories, rating, pricefrom, priceto, searchParams) => {
+    return db
+        .query(`SELECT id, product_id as productid, category_id, title, image, brand, rating, ratings_total, price_value, availability
+                FROM PRODUCTS   
+                WHERE category_id = ANY($1)
+                AND rating >= $2
+                AND price_value >= $3
+                AND price_value <= $4
+                AND (LOWER(title) ILIKE $5)
+                ORDER BY PRICE_VALUE DESC
+                LIMIT 50
+             `, [categories, rating, pricefrom, priceto, '%' + searchParams + '%'])
+        .then((result) => {
+            return { rowCount: result.rowCount, products: result.rows };
+        })
+        .catch(function(err) {
+
+        });
+};
+
+module.exports.getProductsBySelectionSortByRating = (categories, rating, pricefrom, priceto, searchParams) => {
+    return db
+        .query(`SELECT id, product_id as productid, category_id, title, image, brand, rating, ratings_total, price_value, availability
+                FROM PRODUCTS   
+                WHERE category_id = ANY($1)
+                AND rating >= $2
+                AND price_value >= $3
+                AND price_value <= $4
+                AND (LOWER(title) ILIKE $5)
+                ORDER BY rating DESC
+                LIMIT 50
+             `, [categories, rating, pricefrom, priceto, '%' + searchParams + '%'])
+        .then((result) => {
+            return { rowCount: result.rowCount, products: result.rows };
+        })
+        .catch(function(err) {
+
+        });
+};
+
+module.exports.getProductsBySelectionSortByPopularity = (categories, rating, pricefrom, priceto, searchParams) => {
+    return db
+        .query(`SELECT id, product_id as productid, category_id, title, image, brand, rating, ratings_total, price_value, availability
+                FROM PRODUCTS   
+                WHERE category_id = ANY($1)
+                AND rating >= $2
+                AND price_value >= $3
+                AND price_value <= $4
+                AND (LOWER(title) ILIKE $5)
+                ORDER BY ratings_total DESC
+                LIMIT 50
+             `, [categories, rating, pricefrom, priceto, '%' + searchParams + '%'])
+        .then((result) => {
+            return { rowCount: result.rowCount, products: result.rows };
+        })
+        .catch(function(err) {
+
+        });
+};
+
 module.exports.getPopularProducts = () => {
     return db
-        .query(`select id, product_id as productid, category_id, title, image, brand, rating, ratings_total, price_value, availability  
-                from products
-                order by ratings_total desc 
-                LIMIT 8`, [])
+        // .query(`select id, product_id as productid, category_id, title, image, brand, rating, ratings_total, price_value, availability  
+        //         from products
+        //         order by ratings_total desc
+        //         LIMIT 8`, [])
+        .query(`SELECT id, product_id as productid, category_id, title, image, brand, rating, ratings_total, price_value, availability
+        FROM (
+        SELECT id, product_id, category_id, title, image, brand, rating, ratings_total, price_value, availability, Rank() 
+          over (Partition BY category_id
+                ORDER BY ratings_total DESC ) AS Rank
+        FROM PRODUCTS
+        ) rs WHERE Rank <= 1
+		;`, [])
         .then((result) => {
             return { rowCount: result.rowCount, products: result.rows };
         });
