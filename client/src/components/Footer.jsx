@@ -152,7 +152,7 @@ const Footer = () => {
                     <MailOutline style={{ marginRight: "10px" }} />{" "}
                     contact@varna.de
                 </ContactItem>
-                <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" />
+                {/* <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" /> */}
             </Right>
         </Container>
     );
