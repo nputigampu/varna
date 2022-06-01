@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import { addRatingFilter } from "../redux/filter/slice.js";
 import { useSelector, useDispatch } from "react-redux";
-import { getProductByFilter } from "../redux/product/slice.js";
 
 const StyledRating = styled(Rating)({
     "& .MuiRating-iconFilled": {
@@ -27,7 +26,7 @@ export default function ProductRatingFilter() {
 
     React.useEffect(() => {
         dispatch(addRatingFilter(value));
-        dispatch(getProductByFilter());
+        // dispatch(getProductByFilter());
     }, [value]);
 
     return (

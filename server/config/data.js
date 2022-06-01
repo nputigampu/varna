@@ -2,40 +2,40 @@
 // eslint-disable-next-line indent
 const sliderItems = [{
         id: 1,
-        img: "https://images.pexels.com/photos/4947741/pexels-photo-4947741.jpeg",
+        img: "https://i.pinimg.com/564x/d5/5c/66/d55c66832ad3f6c05e4c6f1bcc29eb0b.jpg",
         title: "SUMMER SALE",
         desc: "NEW SUMMER COLLECTION.",
-        bg: "f5fafd",
+        bg: "fcf1ed",
     },
     {
         id: 2,
-        img: "https://i.ibb.co/DG69bQ4/2.png",
+        img: "https://images.pexels.com/photos/972995/pexels-photo-972995.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
         title: "AUTUMN COLLECTION",
         desc: "GET FLAT 30% OFF.",
         bg: "fcf1ed",
     },
     {
         id: 3,
-        img: "https://i.ibb.co/cXFnLLV/3.png",
-        title: "LOUNGEWEAR LOVE",
-        desc: "RELAX IN STYLE.",
+        img: "https://i.pinimg.com/564x/83/c4/fd/83c4fd08182888295bd5b6703cca80b8.jpg",
+        title: "WINTER COLLECTION",
+        desc: "COZY IN STYLE.",
         bg: "fbf0f4",
     },
 ];
 
 const mainCategories = [{
         id: 1,
-        img: "https://images.pexels.com/photos/1342609/pexels-photo-1342609.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        img: "https://i.pinimg.com/564x/06/3b/b1/063bb1b67adeb5daa051a7f77bdd9214.jpg",
         title: "MEN's FASHION!",
     },
     {
         id: 2,
-        img: "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        img: "https://i.pinimg.com/564x/ed/b9/0d/edb90d45c5980f7a8115d44e33168b7a.jpg",
         title: "WOMEN's FASHION",
     },
     {
         id: 3,
-        img: "https://images.pexels.com/photos/115566/pexels-photo-115566.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        img: "https://i.pinimg.com/564x/d2/d1/e8/d2d1e8b54c8acf34ba24e666cf40ab2b.jpg",
         title: "ACCESSORIES",
     },
 ];

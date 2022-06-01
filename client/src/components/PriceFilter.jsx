@@ -27,7 +27,7 @@ export default function PriceFilter() {
 
     React.useEffect(() => {
         dispatch(addPricingFilter(value));
-        dispatch(getProductByFilter());
+        // dispatch(getProductByFilter());
     }, [value]);
 
     const numFormatter = (newValue) => {

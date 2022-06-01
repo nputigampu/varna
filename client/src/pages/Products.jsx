@@ -27,6 +27,7 @@ const ProductContainer = styled.div`
 const SortContainer = styled.div`
     display: flex;
     justify-content: right;
+    margin-right: 10px;
 `;
 
 const Wrapper = styled.div`

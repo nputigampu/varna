@@ -80,9 +80,10 @@ const ImageContainer = styled.div`
 const Logo = styled.h1`
     font-weight: bold;
     cursor: pointer;
-    background-color: e91e63;
+    background-color: #e91e63;
+    // font-family: ariel !important;
     /* Create the gradient. */
-    background-image: linear-gradient(45deg, #ff003d, #3d00eb);
+    // background-image: linear-gradient(45deg, #ff003d, #3d00eb);
 
     /* Set the background size and repeat properties. */
     background-size: 100%;
@@ -154,10 +155,12 @@ const Navbar = () => {
                         dispatch(getUserWishList());
                         dispatch(loadCart());
                     } else {
+                        console.log("error while getting logged in user info");
                     }
                 })
                 .catch((err) => {
                     // if something goes wrong => render an error
+                    console.log("error while getting logged in user info", err);
                 });
         }
     }, []);
@@ -207,7 +210,7 @@ const Navbar = () => {
         <Container>
             <Wrapper>
                 <Left>
-                    <Logo onClick={() => navigate("/")}>VARNA.</Logo>
+                    <Logo onClick={() => navigate("/")}>VARNA</Logo>
                 </Left>
                 <Center>
                     <SearchContainer>

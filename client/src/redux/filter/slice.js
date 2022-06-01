@@ -59,6 +59,15 @@ function filterReducer(state = {}, action) {
                     current_filter: {...state.current_filter, sort: sort }
                 };
             }
+        case "filter/resetCategoryFilter":
+            {
+                const { resetCategory } = action.payload;
+
+                return {
+                    ...state,
+                    current_filter: {...state.current_filter, resetCategory: resetCategory }
+                };
+            }
         default:
             // If this reducer doesn't recognize the action type, or doesn't
             // care about this specific action, return the existing state unchanged
@@ -124,12 +133,18 @@ function addPricingFilter(price) {
 }
 
 function updateSortBy(sort) {
-
     return {
         type: "filter/updateSortBy",
         payload: { sort: sort }
     };
 }
 
+function resetCategoryFilter(resetCategory) {
+    return {
+        type: "filter/resetCategoryFilter",
+        payload: { resetCategory: resetCategory }
+    };
+}
+
 //export actions
-export { getProductFilters, addCategoryFilter, addRatingFilter, addPricingFilter, addSearchFilter, updateSortBy };
+export { getProductFilters, addCategoryFilter, addRatingFilter, addPricingFilter, addSearchFilter, updateSortBy, resetCategoryFilter };

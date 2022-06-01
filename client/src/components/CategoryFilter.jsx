@@ -8,8 +8,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { getProductFilters, addCategoryFilter } from "../redux/filter/slice.js";
-import { getProductByFilter } from "../redux/product/slice.js";
+import {
+    getProductFilters,
+    addCategoryFilter,
+    resetCategoryFilter,
+} from "../redux/filter/slice.js";
 
 const useViewStyles = makeStyles({
     root: {
@@ -72,9 +75,8 @@ const useItemStyles = makeStyles(() => ({
 export default function CategoryFilter() {
     const location = useLocation();
     const [prodCat, setProdCat] = React.useState("");
-    const [category, setCategory] = React.useState("");
-    const initCategory = useSelector(
-        (state) => state.filter.current_filter.category
+    const resetCategory = useSelector(
+        (state) => state.filter.current_filter.resetCategory
     );
     const classesView = useViewStyles();
     const classesItem = useItemStyles();
@@ -98,7 +100,6 @@ export default function CategoryFilter() {
     React.useEffect(() => {
         let shop = location.pathname.split("/").pop();
         let category = shop === "shop" ? "all" : shop;
-        setCategory(category);
         let prodCat = "0";
         switch (category) {
             case "men":
@@ -117,14 +118,14 @@ export default function CategoryFilter() {
         setSelected([prodCat]);
     }, []);
 
-    React.useEffect(() => {}, [initCategory]);
-
-    React.useEffect(() => {}, [expanded]);
-
     React.useEffect(() => {
-        dispatch(addCategoryFilter(selected[0]));
-        dispatch(getProductByFilter());
-    }, [selected]);
+        if (resetCategory) {
+            setSelected([prodCat]);
+            setExpanded([prodCat]);
+            dispatch(addCategoryFilter(prodCat));
+            dispatch(resetCategoryFilter(false));
+        }
+    }, [resetCategory]);
 
     const handleToggle = (event, nodeIds) => {
         setExpanded(nodeIds);
@@ -132,7 +133,12 @@ export default function CategoryFilter() {
 
     const handleSelect = (event, nodeIds) => {
         setSelected([nodeIds]);
+        dispatch(addCategoryFilter(nodeIds));
+        if (resetCategory) {
+            dispatch(resetCategoryFilter(false));
+        }
     };
+
     if (!productFilters) {
         return null;
     }

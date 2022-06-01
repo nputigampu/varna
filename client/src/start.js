@@ -10,14 +10,15 @@ import reducer from "./redux/reducer.js";
 const initialState = {
     filter: {
         current_filter: {
-            searchParams: '',
-            category: 0,
+            searchParams: "",
+            category: "0",
+            resetCategory: false,
             pricefrom: 0,
             priceto: 200,
             rating: 0,
-            sort: 'NEWEST',
-        }
-    }
+            sort: "NEWEST",
+        },
+    },
 };
 
 const store = createStore(
