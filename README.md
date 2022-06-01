@@ -10,3 +10,9 @@ Adding items/products to cart, update cart items(increase number of quantity, de
 At the moment Varna has a cardless(pay with card) checkout .
 All the products I have listed in website are original data(price, rating, product, popularity) which I have manually extracted from rainforest API.
 I wanted to give Varna a professional website look, so that I have added various categories under each section.
+
+
+
+I am sharing here the heroku link below
+
+https://varna-ui.herokuapp.com/
