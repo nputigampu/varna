@@ -1,6 +1,6 @@
 Varna is a Fullstack E-commerce fashion store designed as a final project in Spiced academy.
 Varna is developled by using React, Redux as Frontend, backend Express.js and Node.js and postgres database.
-This website servers mainly on Men's Fashhion, Womens's Fashion and Accessories (Shoppers has wide range of collection to buy).
+This website servers mainly on Men's Fashion, Womens's Fashion and Accessories (Shoppers has wide range of collection to buy).
 It has Login and Register features.
 The main features for the wesbite are  filters by category, filter by price selector slider and filter by rating.
 In addition to that user see the products by using search option.
