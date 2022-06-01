@@ -6,7 +6,8 @@ const {
     getProductsBySelectionSortByPriceHigh,
     getProductsBySelectionSortByRating,
     getProductsBySelectionSortByPopularity,
-    getPopularProducts
+    getPopularProducts,
+    getProductsTotalCountBySelection
 } = require("../../database/db");
 const { Router } = require("express");
 const { sliderItems, mainCategories } = require("../../config/data");
@@ -51,6 +52,7 @@ router.get("/api/products/search/", async(req, res) => {
             }
         })
         .catch(error => {
+            console.log("error", error);
             res.json({
                 success: false,
                 error: 'error while retrieveing products'
@@ -83,7 +85,8 @@ router.get("/api/products/popularProducts", async(req, res) => {
 //Search for products by Category
 router.get("/api/products/", async(req, res) => {
 
-    const { category, rating, pricefrom, priceto, searchParams, sort } = req.query;
+    const { category, rating, pricefrom, priceto, searchParams, sort, page } = req.query;
+    let offset = (page - 1) * 20;
     let categories = [];
     //ugly hack to get child categories. Need to fix it later.
     if (parseInt(category) < 100) {
@@ -95,31 +98,28 @@ router.get("/api/products/", async(req, res) => {
 
     if (req.query) {
         var result;
+        //To do: Investigate if total count and results can be returned in a single db call        
+        const { totalCount } = await getProductsTotalCountBySelection(categories, rating, pricefrom, priceto, searchParams);
         switch (sort) {
             case 'NEWEST':
-                result = await getProductsBySelectionSortByLatest(categories, rating, pricefrom, priceto, searchParams);
-
-                res.json(result);
+                result = await getProductsBySelectionSortByLatest(categories, rating, pricefrom, priceto, searchParams, offset);
+                res.json({ totalCount: totalCount, products: result.products });
                 break;
             case 'PRICE_LOW':
-                result = await getProductsBySelectionSortByPriceLow(categories, rating, pricefrom, priceto, searchParams);
-
-                res.json(result);
+                result = await getProductsBySelectionSortByPriceLow(categories, rating, pricefrom, priceto, searchParams, offset);
+                res.json({ totalCount: totalCount, products: result.products });
                 break;
             case 'PRICE_HIGH':
-                result = await getProductsBySelectionSortByPriceHigh(categories, rating, pricefrom, priceto, searchParams);
-
-                res.json(result);
+                result = await getProductsBySelectionSortByPriceHigh(categories, rating, pricefrom, priceto, searchParams, offset);
+                res.json({ totalCount: totalCount, products: result.products });
                 break;
             case 'RATING':
-                result = await getProductsBySelectionSortByRating(categories, rating, pricefrom, priceto, searchParams);
-
-                res.json(result);
+                result = await getProductsBySelectionSortByRating(categories, rating, pricefrom, priceto, searchParams, offset);
+                res.json({ totalCount: totalCount, products: result.products });
                 break;
             case 'POPULARITY':
-                result = await getProductsBySelectionSortByPopularity(categories, rating, pricefrom, priceto, searchParams);
-
-                res.json(result);
+                result = await getProductsBySelectionSortByPopularity(categories, rating, pricefrom, priceto, searchParams, offset);
+                res.json({ totalCount: totalCount, products: result.products });
                 break;
         }
 

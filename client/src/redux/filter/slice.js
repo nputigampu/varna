@@ -8,7 +8,6 @@ function filterReducer(state = {}, action) {
         case "filter/productFilters":
             {
                 const { productFilters } = action.payload;
-
                 return {
                     ...state,
                     productFilters: productFilters,
@@ -17,7 +16,6 @@ function filterReducer(state = {}, action) {
         case "filter/setCategoryFilter":
             {
                 const { category } = action.payload;
-
                 return {
                     ...state,
                     current_filter: {...state.current_filter, category: category }
@@ -26,7 +24,6 @@ function filterReducer(state = {}, action) {
         case "filter/setSearchFilter":
             {
                 const { searchParams } = action.payload;
-
                 return {
                     ...state,
                     current_filter: {...state.current_filter, searchParams: searchParams }
@@ -35,7 +32,6 @@ function filterReducer(state = {}, action) {
         case "filter/setRatingFilter":
             {
                 const { rating } = action.payload;
-
                 return {
                     ...state,
                     current_filter: {...state.current_filter, rating: rating }
@@ -44,7 +40,6 @@ function filterReducer(state = {}, action) {
         case "filter/setPricingFilter":
             {
                 const { pricerange } = action.payload;
-
                 return {
                     ...state,
                     current_filter: {...state.current_filter, pricefrom: pricerange.from, priceto: pricerange.to }
@@ -53,7 +48,6 @@ function filterReducer(state = {}, action) {
         case "filter/updateSortBy":
             {
                 const { sort } = action.payload;
-
                 return {
                     ...state,
                     current_filter: {...state.current_filter, sort: sort }
@@ -62,10 +56,17 @@ function filterReducer(state = {}, action) {
         case "filter/resetCategoryFilter":
             {
                 const { resetCategory } = action.payload;
-
                 return {
                     ...state,
                     current_filter: {...state.current_filter, resetCategory: resetCategory }
+                };
+            }
+        case "filter/updatePage":
+            {
+                const { currentPage } = action.payload;
+                return {
+                    ...state,
+                    page: currentPage
                 };
             }
         default:
@@ -146,5 +147,12 @@ function resetCategoryFilter(resetCategory) {
     };
 }
 
+function updatePage(page) {
+    return {
+        type: "filter/updatePage",
+        payload: { currentPage: page }
+    };
+}
+
 //export actions
-export { getProductFilters, addCategoryFilter, addRatingFilter, addPricingFilter, addSearchFilter, updateSortBy, resetCategoryFilter };
+export { getProductFilters, addCategoryFilter, addRatingFilter, addPricingFilter, addSearchFilter, updateSortBy, resetCategoryFilter, updatePage };

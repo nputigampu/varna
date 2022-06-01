@@ -11,6 +11,7 @@ import {
     resetCategoryFilter,
     addRatingFilter,
     addPricingFilter,
+    updatePage,
 } from "../redux/filter/slice.js";
 import { getProductByFilter } from "../redux/product/slice.js";
 
@@ -27,6 +28,7 @@ const Filters = () => {
     const filter_params = useSelector((state) => state.filter.current_filter);
 
     useEffect(() => {
+        dispatch(updatePage(1));
         dispatch(getProductByFilter());
     }, [filter_params]);
 
@@ -34,6 +36,7 @@ const Filters = () => {
         dispatch(resetCategoryFilter(true));
         dispatch(addPricingFilter([0, 200]));
         dispatch(addRatingFilter(0));
+        dispatch(updatePage(1));
     };
 
     return (

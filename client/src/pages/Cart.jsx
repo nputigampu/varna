@@ -246,9 +246,6 @@ const Cart = () => {
                         <TopButton onClick={() => navigate("/")}>
                             CONTINUE SHOPPING
                         </TopButton>
-                        <TopButton type="filled" onClick={onCheckOut}>
-                            CHECKOUT NOW
-                        </TopButton>
                     </Top>
                     <Bottom>
                         <CartItemContainer>

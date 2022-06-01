@@ -9,6 +9,7 @@ import reducer from "./redux/reducer.js";
 
 const initialState = {
     filter: {
+        page: 1,
         current_filter: {
             searchParams: "",
             category: "0",

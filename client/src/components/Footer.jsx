@@ -104,7 +104,7 @@ const Footer = () => {
     return (
         <Container>
             <Left>
-                <Logo>VARNA.</Logo>
+                <Logo>VARNA</Logo>
                 <Desc>
                     Your one stop shop for all your Fashion needs. We are 100%
                     commited to a sustainable and environmentally friendly

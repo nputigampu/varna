@@ -6,11 +6,12 @@ function productReducer(state = {}, action) {
     switch (action.type) {
         case "product/filtered":
             {
-                const { products } = action.payload;
+                const { totalCount, products } = action.payload;
 
                 return {
                     ...state,
                     filtered: products,
+                    totalCount: totalCount,
                 };
             }
         default:
@@ -26,14 +27,15 @@ function productReducer(state = {}, action) {
 function getProductByFilter() {
 
     return async function getProductByFilterThunk(dispatch, getState) {
-        const { filter: { current_filter: { category, rating, pricefrom, priceto, searchParams, sort } } } = getState();
+        const { filter: { page, current_filter: { category, rating, pricefrom, priceto, searchParams, sort } } } = getState();
         if (category === undefined ||
             rating === undefined ||
             pricefrom === undefined ||
             priceto === undefined ||
             searchParams === undefined ||
-            sort === undefined) {
-
+            sort === undefined ||
+            page === undefined) {
+            console.log("page initializing. do not send api request to server");
         } else {
             var url = new URL(window.location.origin + '/api/products/');
             var params = {
@@ -42,18 +44,18 @@ function getProductByFilter() {
                 pricefrom: pricefrom,
                 priceto: priceto,
                 searchParams: searchParams,
-                sort: sort
+                sort: sort,
+                page: page
             };
             url.search = new URLSearchParams(params).toString();
-            // let url = "/api/products/category/" + category;
-
-            const { products } = await fetch(url).then((response) =>
+            const { totalCount, products } = await fetch(url).then((response) =>
                 response.json()
             );
 
             dispatch({
                 type: "product/filtered",
                 payload: {
+                    totalCount: totalCount,
                     products: products,
                 },
             });
@@ -69,8 +71,6 @@ function getProductBySearchParam(searchParams) {
             searchParams: searchParams,
         };
         url.search = new URLSearchParams(params).toString();
-
-
         const { products } = await fetch(url).then((response) =>
             response.json()
         );

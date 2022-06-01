@@ -12,7 +12,6 @@ import { userLogin, userLogout, reset } from "../redux/user/slice.js";
 import { addSearchFilter } from "../redux/filter/slice.js";
 
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -272,31 +271,34 @@ const Navbar = () => {
                             }}
                         >
                             {!user && (
-                                <React.Fragment>
+                                <div>
                                     <MenuItem
+                                        key="1"
                                         onClick={() => navigate("/login")}
                                     >
                                         <LoginOutlinedIcon sx={{ mr: 2 }} />{" "}
                                         Login
                                     </MenuItem>
                                     <MenuItem
+                                        key="2"
                                         onClick={() => navigate("/register")}
                                     >
                                         <PersonOutlinedIcon sx={{ mr: 1.5 }} />{" "}
                                         Register
                                     </MenuItem>
-                                </React.Fragment>
+                                </div>
                             )}
                             {user && (
-                                <React.Fragment>
+                                <div>
                                     <MenuItem
+                                        key="3"
                                         onClick={() => navigate("/profile")}
                                     >
                                         <PersonOutlinedIcon sx={{ mr: 2 }} />{" "}
                                         Profile
                                     </MenuItem>
                                     <Divider />
-                                    <MenuItem onClick={handleLogout}>
+                                    <MenuItem key="4" onClick={handleLogout}>
                                         <ListItemIcon>
                                             <Logout
                                                 fontSize="small"
@@ -305,7 +307,7 @@ const Navbar = () => {
                                         </ListItemIcon>
                                         Logout
                                     </MenuItem>
-                                </React.Fragment>
+                                </div>
                             )}
                         </Menu>
                     </ImageContainer>
