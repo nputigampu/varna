@@ -26,7 +26,7 @@ const sliderItems = [{
 const mainCategories = [{
         id: 1,
         img: "https://i.pinimg.com/564x/06/3b/b1/063bb1b67adeb5daa051a7f77bdd9214.jpg",
-        title: "MEN's FASHION!",
+        title: "MEN's FASHION",
     },
     {
         id: 2,
