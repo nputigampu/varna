@@ -96,9 +96,9 @@ const ContactItem = styled.div`
     align-items: center;
 `;
 
-const Payment = styled.img`
-    width: 50%;
-`;
+// const Payment = styled.img`
+//     width: 50%;
+// `;
 
 const Footer = () => {
     return (
