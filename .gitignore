@@ -103,5 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
-# TernJS port file
+# Other misc files
 secrets.json
+.DS_Store
+client/public/bundle.js
+client/public/bundle.js.LICENSE.txt
+bundle.css
