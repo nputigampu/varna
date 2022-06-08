@@ -1,4 +1,4 @@
-#h1 Varna
+ Varna
 
 Varna is an e-commerce fashion store developled using Javascript, React.js and Redux for Frontend, and Node.js and express.js and postgres database for backend.
 
