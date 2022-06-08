@@ -1,0 +1,10 @@
+<svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <style>
+            .ckcls-1 {
+                stroke: #d81b60
+            }
+        </style>
+    </defs>
+	<path class="ckcls-1" fill="none" stroke="#000" stroke-linecap="round" stroke-width="6.5" d="M25 43.75L125 43.75L125 143.75L25 143.75L25 43.75ZM50 56.25L50 31.25C50 17.443 61.221 6.25 75 6.25L75 6.25C88.807 6.25 100 17.471 100 31.25L100 56.25"/>
+</svg>
